@@ -23,7 +23,7 @@ const tyreallRoutes = require("./routes/tyreallRoutes");
 
 
 const app = express();
-app.use(cors({ origin: 'http://localhost:5173' }));
+app.use(cors({ origin: 'https://test-final-8khz.vercel.app' }));
 app.use(express.json());
 
 // Connect to MongoDB

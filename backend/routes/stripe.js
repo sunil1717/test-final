@@ -12,7 +12,7 @@ router.post('/create-payment-intent', async (req, res) => {
   try {
     const paymentIntent = await stripe.paymentIntents.create({
       amount, // in cents
-      currency: 'usd', // or 'inr'
+      currency: 'aud', // or 'inr'
       payment_method_types: ['card'],
       metadata: {
         userPhone: phone || 'Not provided',

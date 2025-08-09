@@ -61,13 +61,16 @@ html {
   0% {
     width: 0%;
   }
+  50% {
+    width: 50%;
+  }
   100% {
     width: 100%;
   }
 }
 
 .animate-progress-bar {
-  animation: progress-bar 1s infinite ease-in-out;
+  animation: progress-bar 2s infinite ease-in-out;
 }
 
 

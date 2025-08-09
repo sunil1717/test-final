@@ -25,6 +25,8 @@ const CheckoutPage = () => {
   const { user } = useAuthStore();
 
   const [errorMessage, setErrorMessage] = useState("");
+    const [loading, setLoading] = useState(false);
+  
 
   const [form, setForm] = useState({
     address: "",
@@ -52,14 +54,16 @@ const CheckoutPage = () => {
 
       return;
     }
-
+    setLoading(true);
+    
     try {
       await createBooking({
         address: `${form.address}, ${form.postcode}, ${form.suburb}`,
         paymentMethod: form.paymentMethod,
       });
 
-
+    setLoading(false);
+      
       navigate("/order");
     } catch (err) {
       setErrorMessage("Failed to place booking");
@@ -177,10 +181,12 @@ const CheckoutPage = () => {
             {form.paymentMethod === "CashOnDelivery" && (
               <button
                 onClick={handlePlaceOrder}
-                className="w-full sm:w-auto bg-red-600 hover:bg-red-700 text-white py-2 px-6 rounded font-bold hover:cursor-pointer"
+                className={`w-full sm:w-auto bg-red-600 hover:bg-red-700 text-white py-2 px-6 rounded font-bold hover:cursor-pointer ${
+          loading ? "opacity-50 cursor-not-allowed" : ""
+        }`}
                 disabled={cart.length === 0}
               >
-                Place Order
+                {loading ? "Processing..." : "Place Order"}
               </button>
             )}
 

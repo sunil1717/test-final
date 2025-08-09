@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect,useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { useShopStore } from "../store/shopStore";
@@ -14,6 +14,8 @@ const Cart = () => {
   } = useShopStore();
 
   const navigate = useNavigate();
+  const [loadingItemId, setLoadingItemId] = useState(null);
+
 
   useEffect(() => {
     fetchCart();
@@ -23,7 +25,14 @@ const Cart = () => {
     if (newQty >= 1 && newQty <= 5) {
       const priceKey = `Price for ${newQty}`;
       const updatedPrice = tyre[priceKey] || tyre.price;
-      updateCartItem(tyreId, newQty, updatedPrice);
+
+      setLoadingItemId(tyreId);
+      try {
+        updateCartItem(tyreId, newQty, updatedPrice);
+      } finally {
+        setTimeout(() => setLoadingItemId(null), 400);
+      }
+
 
     }
   };
@@ -48,17 +57,30 @@ const Cart = () => {
   return (
     <>
       <Navbar />
-      <button
+      
+
+     
+         
+     
+     
+
+      <div className="min-h-screen mt-15 sm:mt-30 bg-white flex justify-center pt-2 ">
+
+        <div className="bg-white w-full pl-2 pr-2  rounded-lg shadow-lg">
+          {loadingItemId && (
+            <div className="w-full h-1 bg-gray-200 overflow-hidden mb-1 ">
+              <div className="h-full bg-red-600 animate-progress"></div>
+            </div>
+          )}
+           <button
         onClick={() => navigate("/")}
-        className="absolute top-4 left-1 mb-5 text-gray-700 mt-14 sm:mt-29 hover:text-red-600 flex items-center gap-1"
+        className=" top-6 left-1 mb-3 mt-2 text-gray-700  hover:text-red-600 flex items-center gap-1"
       >
+        
         <ArrowLeft size={20} />
         <span className="text-sm sm:text-base">Home</span>
       </button>
-
-      <div className="min-h-screen mt-17 sm:mt-36 bg-white flex justify-center pt-6 ">
-
-        <div className="bg-white w-full ml-2 pr-2  rounded-lg shadow-lg">
+          
 
 
           <div className="flex justify-between items-center mb-4">
@@ -147,6 +169,28 @@ const Cart = () => {
           </div>
         </div>
       </div>
+
+
+
+
+
+
+      <style>
+        {`
+  @keyframes progress {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+  .animate-progress {
+    animation: progress 0.8s ease-in-out infinite;
+  }
+`}
+      </style>
+
+
+
+
+
     </>
   );
 };

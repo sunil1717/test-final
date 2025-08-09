@@ -292,7 +292,7 @@ export default function HomePage() {
                         "Price for 2": tyre["Price for 2"],
                         "Price for 3": tyre["Price for 3"],
                         "Price for 4": tyre["Price for 4"],
-                        "Price for 5":tyre["Price for 5"],
+                        "Price for 5": tyre["Price for 5"],
                       };
                       addToCart(newTyre, selectedOption.qty);
                     }
@@ -376,13 +376,13 @@ export default function HomePage() {
 
 
 
-    const uniqueBrands = results.length > 0
-  ? [...new Set(results.map(tyre => tyre.Brand))]
-  : [];
+  const uniqueBrands = results.length > 0
+    ? [...new Set(results.map(tyre => tyre.Brand))]
+    : [];
 
   const uniqueTypes = results.length > 0
-  ? [...new Set(results.map(tyre => tyre.Type))]
-  : [];
+    ? [...new Set(results.map(tyre => tyre.Type))]
+    : [];
 
 
 
@@ -419,9 +419,39 @@ export default function HomePage() {
     );
   }
 
+
+
+
+
+
+
   return (
     <>
       <div className="font-sans  overflow-y-hidden">
+
+        {searching && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-md transition-opacity duration-500">
+    <div className="flex flex-col items-center justify-center space-y-4  rounded-xl ">
+      
+      {/* Logo */}
+      <img
+        src="/logoB.png"
+        alt="Loading..."
+        className="w-15 h-10 animate-ping  text-black"
+      />
+
+      {/* Animated progress bar */}
+      <div className="relative w-15 h-1 bg-gray-300 rounded-full overflow-hidden">
+        <div className="absolute left-0 top-0 h-full bg-red-500 animate-progress-bar rounded-full"></div>
+      </div>
+
+     
+      
+    </div>
+  </div>
+)}
+
+
         {/* Navbar */}
         <Navbar />
 
@@ -646,15 +676,17 @@ export default function HomePage() {
               {/* Results Section */}
               <div ref={resultsRef} className="lg:w-3/4">
                 {commonBrand && (
-                  <div className="text-center mb-6">
-                    <h2 className="text-2xl font-bold text-gray-800">
-                      Tyres for <span className="text-red-600">{commonBrand}</span>
+                  <div className="text-center mb-8 p-6 bg-gradient-to-r from-white via-gray-100 to-white rounded-xl shadow-md">
+
+                    <h2 className="text-3xl font-extrabold text-gray-800 mb-2 tracking-tight">
+                      Tyres for <span className="text-red-600 underline decoration-underline">{commonBrand}</span>
                     </h2>
-                    <p className="text-gray-600 mt-1">
+                    <p className="text-gray-600 text-lg">
                       We found matching tyres based on your search
                     </p>
                   </div>
                 )}
+
 
                 {filteredResults.length > 0 ? (
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">

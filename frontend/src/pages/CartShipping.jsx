@@ -54,7 +54,7 @@ const CartShipping = () => {
                       </p>
                     </div>
                     <p className="font-semibold text-red-500">
-                      ${item.quantity * item.tyre.price}
+                      ${(item.quantity * item.tyre.price).toFixed(2)}
                     </p>
                   </div>
                 </div>
@@ -68,16 +68,16 @@ const CartShipping = () => {
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
                 <span>Subtotal</span>
-                <span>${subtotal}</span>
+                <span>${(subtotal).toFixed(2)}</span>
               </div>
               <div className="flex justify-between">
                 <span>Shipping</span>
-                <span>${shipping}</span>
+                <span>${(shipping).toFixed(2)}</span>
               </div>
               <div className="border-t my-2"></div>
               <div className="flex justify-between font-semibold text-lg">
                 <span>Total</span>
-                <span>${total}</span>
+                <span>${(total).toFixed(2)}</span>
               </div>
             </div>
 

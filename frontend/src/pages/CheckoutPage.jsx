@@ -21,11 +21,16 @@ const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
 const CheckoutPage = () => {
   const navigate = useNavigate();
-  const { cart, createBooking } = useShopStore();
+  const { cart, createBooking, checkServiceArea } = useShopStore();
   const { user } = useAuthStore();
+
+  const [errorMessage, setErrorMessage] = useState("");
 
   const [form, setForm] = useState({
     address: "",
+    postcode: "",
+    suburb: "",
+
     paymentMethod: "CashOnDelivery",
   });
 
@@ -34,37 +39,44 @@ const CheckoutPage = () => {
   };
 
   const handlePlaceOrder = async () => {
-    if (!form.address || !form.paymentMethod) {
-      alert("Please fill all fields");
+     setErrorMessage("");
+
+    if (!form.address || !form.paymentMethod || !form.postcode || !form.suburb) {
+      setErrorMessage("Plz fill all details ")
       return;
     }
 
+    const isServiceable = await checkServiceArea(form.postcode.trim(), form.suburb.trim());
+    if (!isServiceable) {
+            setErrorMessage(`Sorry, we currently do not serve this service area`);
 
+      return;
+    }
 
     try {
       await createBooking({
-        address: form.address,
+        address: `${form.address}, ${form.postcode}, ${form.suburb}`,
         paymentMethod: form.paymentMethod,
       });
 
 
       navigate("/order");
     } catch (err) {
-      alert("Failed to place booking");
+      setErrorMessage("Failed to place booking");
     }
   };
 
 
- 
 
-  
-const totalAmount = cart.reduce((acc, item) => {
-  const price = parseFloat(item.tyre?.price) || 0;
-  const qty = parseInt(item.quantity) || 1;
-  return acc + price * qty;
-}, 0);
 
-const stripeAmount = Math.round(totalAmount * 100);
+
+  const totalAmount = cart.reduce((acc, item) => {
+    const price = parseFloat(item.tyre?.price) || 0;
+    const qty = parseInt(item.quantity) || 1;
+    return acc + price * qty;
+  }, 0);
+
+  const stripeAmount = Math.round(totalAmount * 100);
 
 
 
@@ -92,9 +104,27 @@ const stripeAmount = Math.round(totalAmount * 100);
             name="address"
             value={form.address}
             onChange={handleChange}
-            placeholder="Delivery Address(give your full address)"
+            placeholder="Delivery Address"
             className="w-full border p-2 rounded"
           />
+          <div className="flex gap-4">
+            <input
+              name="postcode"
+              value={form.postcode}
+              onChange={handleChange}
+              placeholder="Postcode"
+              className="w-1/2 border p-2 rounded"
+            />
+
+            <input
+              name="suburb"
+              value={form.suburb}
+              onChange={handleChange}
+              placeholder="Suburb"
+              className="w-1/2 border p-2 rounded"
+            />
+          </div>
+
 
           <select
             name="paymentMethod"
@@ -105,17 +135,24 @@ const stripeAmount = Math.round(totalAmount * 100);
             <option value="CashOnDelivery">Cash On Delivery</option>
             <option value="Stripe" >Stripe</option>
           </select>
+          {errorMessage && (
+        <p className="text-red-600 text-sm font-medium">{errorMessage}</p>
+      )}
           {/* Payment Method Selection Output */}
           {form.paymentMethod === "Stripe" && (
-            <Elements stripe={stripePromise}>
+            <Elements stripe={stripePromise} >
               <StripeCheckoutForm
-                amount={ stripeAmount} // in cents
-                
-                
+                amount={stripeAmount} // in cents
+                postcode={form.postcode}
+                suburb={form.suburb}
+                address={form.address}
+
+
+
                 onSuccess={async () => {
                   try {
                     await createBooking({
-                      address: form.address,
+                      address: `${form.address}, ${form.postcode}, ${form.suburb}`,
                       paymentMethod: "Stripe",
                     });
                     navigate("/order");

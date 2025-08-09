@@ -139,7 +139,7 @@ const CheckoutPage = () => {
             <option value="CashOnDelivery">Cash On Delivery</option>
             <option value="Stripe" >Stripe</option>
           </select>
-          {errorMessage && (
+          {errorMessage && form.paymentMethod === "CashOnDelivery" && (
         <p className="text-red-600 text-sm font-medium">{errorMessage}</p>
       )}
           {/* Payment Method Selection Output */}

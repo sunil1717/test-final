@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useShopStore } from '../store/shopStore';
 import useAuthStore from '../store/authStore';
+import { ChevronDownIcon } from '@heroicons/react/24/solid'
 
 const RecommendedProducts = ({ tyres }) => {
 
@@ -176,6 +177,11 @@ const RecommendedProducts = ({ tyres }) => {
                 <p className="text-sm text-gray-500 text-center mb-1">
                   Load/Speed: {tyre["LOAD/SPEED RATING"]}
                 </p>
+                {
+                  isMobile && !isOutofstock && (
+                    <button className="w-full p-2 text-center text-red-400 underline" >Buy Now</button>
+                  )
+                }
 
 
                 {!isOutofstock && (
@@ -189,6 +195,14 @@ const RecommendedProducts = ({ tyres }) => {
                       }`}
                   >
                     <div onClick={(e) => e.stopPropagation()} className="space-y-0">
+                      {isMobile && (
+                        <button onClick={() => {
+
+                          setOpenCardKey(null);
+
+                        }}
+                          className=' text-end text-gray-500'><ChevronDownIcon className="w-5 h-5" /></button>
+                      )}
                       {priceOptions.map((option) => (
                         <label
                           key={option.qty}

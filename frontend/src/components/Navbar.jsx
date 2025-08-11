@@ -88,7 +88,7 @@ export default function Navbar() {
         <div className="flex items-center justify-between max-w-[1300px] mx-auto">
           {/* Left: Logo */}
           <div className="flex items-center gap-4">
-            <img src="/logoB.png" alt="Top Shelf" className="h-12 sm:h-19" />
+            <img src="/logoB.jpg" alt="Top Shelf" className="h-12 sm:h-19" />
           </div>
 
 

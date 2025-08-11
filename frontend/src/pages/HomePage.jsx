@@ -424,7 +424,7 @@ export default function HomePage() {
     return (
       <div className="flex items-center justify-center min-h-screen bg-white">
         <img
-          src="/logoB.png"
+          src="/logoB.jpg"
           alt="Loading..."
           className="w-15 h-13 animate-pulse"
         />
@@ -448,7 +448,7 @@ export default function HomePage() {
       
       {/* Logo */}
       <img
-        src="/logoB.png"
+        src="/logoB.jpg"
         alt="Loading..."
         className="w-15 h-10 animate-ping  text-black"
       />
